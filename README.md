@@ -48,7 +48,7 @@ sistema-farmacia/
 │
 ├── main.py              # Código fuente principal
 └── README.md            # Documentación del proyecto
-
+```
 
 ## 👤 Autores
 
