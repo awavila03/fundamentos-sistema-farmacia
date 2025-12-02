@@ -1,0 +1,8 @@
+# --- Carpetas del sistema (Basura) ---
+__pycache__/
+venv/
+.venv/
+
+# --- Archivos generados (Reportes que no queremos guardar) ---
+*.pdf
+boleta_*.txt
