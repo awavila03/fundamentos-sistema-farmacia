@@ -1,5 +1,100 @@
-101,Paracetamol 500mg,2.5,100
-102,Ibuprofeno 400mg,5.0,50
-103,Amoxicilina 1g,15.0,30
-104,Jabón Líquido,8.5,20
-105,Alcohol Medicinal,6.0,40
+101,Paracetamol 500mg Tableta,1.0,100
+102,Paracetamol 1g Tableta,2.5,80
+103,Paracetamol Jarabe 120mg/5ml,5.0,50
+104,Ibuprofeno 400mg Tableta,1.5,100
+105,Ibuprofeno 600mg Tableta,2.8,90
+106,Ibuprofeno Jarabe 100mg/5ml,7.5,40
+107,Amoxicilina 500mg Capsula,2.0,100
+108,Amoxicilina 875mg Tableta,3.5,60
+109,Amoxicilina Susp. 250mg/5ml,12.0,30
+110,Aspirina 100mg Tableta,1.2,150
+111,Aspirina 500mg Tableta,2.0,100
+112,Naproxeno 550mg Tableta,3.0,80
+113,Diclofenaco Sodico 50mg Tableta,1.8,100
+114,Diclofenaco Gel 1% Tubo 50g,15.0,25
+115,Cetirizina 10mg Tableta,1.5,120
+116,Loratadina 10mg Tableta,1.2,130
+117,Loratadina Jarabe 5mg/5ml,9.0,40
+118,Clorfenamina 4mg Tableta,0.5,200
+119,Omeprazol 20mg Capsula,1.0,150
+120,Omeprazol 40mg Capsula,2.5,80
+121,Ranitidina 150mg Tableta,1.0,100
+122,Bismutol Susp. 150ml,22.0,30
+123,Sal de Andrews Sobre 5g,2.5,200
+124,Gaseovet Gotas 15ml,18.0,40
+125,Enterogermina Ampolla 5ml,4.5,60
+126,Suero Oral Electrolitos Fresa,6.0,50
+127,Suero Oral Electrolitos Naranja,6.0,50
+128,Azitromicina 500mg Tableta,5.0,80
+129,Ciprofloxacino 500mg Tableta,3.0,90
+130,Fluconazol 150mg Capsula,6.0,70
+131,Clotrimazol Crema 1% 20g,8.0,40
+132,Vick VapoRub Ungüento 50g,12.5,50
+133,Panadol Antigripal Tableta,1.5,150
+134,Kitadol 500mg Tableta,1.2,100
+135,Apronax 275mg Tableta,2.5,80
+136,Apronax 550mg Tableta,4.0,60
+137,Buscapina Compositum Tableta,2.8,90
+138,Plidanes Compuesto Tableta,2.0,80
+139,Neurobion Inyectable 3ml,15.0,30
+140,Complejo B Tableta,1.5,100
+141,Vitamina C 1g Tableta Eferv.,2.5,80
+142,Redoxon Vitamina C + Zinc,3.5,60
+143,Pharmaton Capsulas Frasco 30,55.0,20
+144,Ensure Polvo Vainilla 400g,65.0,15
+145,Pediasure Polvo Vainilla 400g,70.0,15
+146,Similac 1 Formula 400g,50.0,20
+147,Nan 3 Formula 800g,90.0,10
+148,Pañales Huggies Talla M x50,45.0,20
+149,Pañales Pampers Talla G x48,48.0,20
+150,Toallitas Humedas Huggies x80,10.0,40
+151,Alcohol Medicinal 70° 1L,12.0,50
+152,Alcohol Medicinal 96° 1L,15.0,40
+153,Agua Oxigenada 120ml,3.0,60
+154,Algodon Hidrofilo 50g,4.0,50
+155,Gasa Esteril 10x10cm Sobre,1.5,100
+156,Curitas Caja x100,8.0,30
+157,Venda Elastica 4x5 yardas,5.0,40
+158,Esparadrapo Tela 2.5cm,6.0,50
+159,Mascarilla KN95 Caja x10,15.0,30
+160,Guantes Latex Caja x100 Talla M,25.0,20
+161,Jabon Liquido Antibac. 400ml,9.0,40
+162,Shampoo H&S Control Caspa 375ml,22.0,25
+163,Desodorante Rexona Spray 150ml,14.0,30
+164,Pasta Dental Colgate 150ml,8.0,50
+165,Cepillo Dental Oral-B Medio,5.0,60
+166,Enjuague Bucal Listerine 500ml,25.0,20
+167,Bloqueador Solar Umbrella 60g,65.0,15
+168,Crema Hidratante Nivea 250ml,18.0,25
+169,Bepanthen Crema 30g,22.0,30
+170,Hipoglos Pomada 60g,18.0,30
+171,Preservativos Durex Caja x3,12.0,50
+172,Preservativos Piel Caja x3,5.0,80
+173,Prueba Embarazo Gravitest,15.0,40
+174,Pastilla Dia Siguiente Postinor,20.0,30
+175,Metformina 850mg Tableta,0.8,150
+176,Metformina 500mg Tableta,0.5,150
+177,Glibenclamida 5mg Tableta,0.3,120
+178,Losartan 50mg Tableta,1.0,150
+179,Enalapril 10mg Tableta,0.8,120
+180,Captopril 25mg Tableta,0.5,100
+181,Amlodipino 5mg Tableta,0.7,100
+182,Atorvastatina 20mg Tableta,2.0,80
+183,Simvastatina 40mg Tableta,2.5,70
+184,Alprazolam 0.5mg Tableta,1.5,50
+185,Clonazepam 0.5mg Tableta,1.8,50
+186,Sertralina 50mg Tableta,3.0,60
+187,Fluoxetina 20mg Capsula,2.5,60
+188,Dexametasona 4mg Ampolla,4.0,40
+189,Prednisona 20mg Tableta,1.5,80
+190,Prednisona 5mg Tableta,0.8,100
+191,Alercet D Jarabe 60ml,25.0,20
+192,Mochila de Emergencia Basica,80.0,10
+193,Termometro Digital,15.0,30
+194,Oximetro de Pulso,35.0,15
+195,Tensiometro Digital Brazo,90.0,10
+196,Glucerna Polvo Vainilla 400g,75.0,12
+197,Mentholatum Pote 18g,8.0,40
+198,Hirudoid Gel 40g,35.0,20
+199,Voltaren Emulgel 60g,45.0,15
+200,Bio-Oil Aceite 60ml,38.0,15
