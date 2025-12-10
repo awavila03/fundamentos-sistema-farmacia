@@ -1,10 +1,10 @@
-import os  # Importamos 'os' para manejar rutas de carpetas y archivos (Windows/Linux)
-from datetime import datetime # Importamos 'datetime' para poner fecha y hora exacta a las boletas
-
 # =============================================================================
 # 1. CONFIGURACIÓN INICIAL (Variables Globales)
-# Definimos las rutas al inicio para mantener el orden.
+# Importamos las librerías a utilizar y definimos las rutas de los datos.
 # =============================================================================
+
+import os  # Importamos 'os' para manejar rutas de carpetas y archivos (Windows/Linux)
+from datetime import datetime # Importamos 'datetime' para poner fecha y hora exacta a las boletas
 
 CARPETA_DATOS = 'datos'           # Nombre de la carpeta donde vive la base de datos
 NOMBRE_ARCHIVO = 'productos.csv'  # Nombre del archivo físico
@@ -18,8 +18,8 @@ ARCHIVO_INVENTARIO = os.path.join(CARPETA_DATOS, NOMBRE_ARCHIVO)
 # =============================================================================
 
 def cargar_inventario():
-    #Lee el archivo CSV y carga los datos en una MATRIZ (Lista de Listas).
-    #Si el archivo no existe, devuelve None para detener el programa.
+    # Lee el archivo CSV y carga los datos en una MATRIZ (Lista de Listas).
+    # Si el archivo no existe, devuelve None para detener el programa.
     
     inventario = [] # Lista vacía que llenaremos con cada fila del csv
     
@@ -61,10 +61,9 @@ def cargar_inventario():
         return None 
 
 def guardar_cambios(inventario):
-    """
-    Vuelca la matriz de la memoria RAM al disco duro (CSV).
-    Se ejecuta al salir para guardar todas las ventas realizadas.
-    """
+    # Vuelca la matriz de la memoria RAM al disco duro (CSV).
+    # Se ejecuta al salir para guardar todas las ventas realizadas.
+    
     # Seguridad: Si borraron la carpeta 'datos' por error, la creamos.
     if not os.path.exists(CARPETA_DATOS):
         os.makedirs(CARPETA_DATOS)
@@ -99,9 +98,9 @@ def mostrar_menu():
     print("-" * 40)
 
 def ver_inventario(inventario):
-    """
-    Recorre la matriz y muestra los datos ordenados como tabla.
-    """
+    # Recorre la matriz y muestra los datos ordenados como tabla.
+    # AJUSTE: Se amplió el ancho de columna a 40 para nombres largos.
+    
     print("\n--- REPORTE DE INVENTARIO ---")
     print("ID    | PRODUCTO                                 | PRECIO       | STOCK")
     print("-" * 78)
@@ -119,119 +118,134 @@ def ver_inventario(inventario):
 
 
 # =============================================================================
-# 4. CAPA DE LÓGICA DE NEGOCIO (Operaciones)
+# 4. CAPA DE LÓGICA DE NEGOCIO (Operaciones con Carrito)
 # "El cerebro": Validaciones, cálculos y reglas del negocio.
 # =============================================================================
 
 def realizar_venta(inventario):
-    """
-    Función de venta INTELIGENTE.
-    1. Permite buscar por ID (números) o por Nombre (texto).
-    2. Valida stock suficiente.
-    3. Actualiza la memoria y calcula el total.
-    """
-    print("\n--- MÓDULO DE VENTA ---")
+    # Función de venta MEJORADA CON CARRITO.
+    # Permite agregar múltiples productos antes de finalizar la venta.
+    # Retorna: La lista 'carrito' y el 'gran_total'.
     
-    # 1. Entrada Flexible: El usuario puede escribir "101" o "paracetamol"
-    entrada = input("Ingrese el ID o el Nombre del producto: ")
+    print("\n--- MÓDULO DE VENTA (CARRITO) ---")
     
-    id_buscado = 0 # Variable para guardar el ID final seleccionado
+    carrito = []      # Lista temporal para guardar los productos seleccionados
+    gran_total = 0.0  # Acumulador para el monto total a pagar
     
-    # --- ESCENARIO A: BÚSQUEDA POR ID (Si escribió solo números) ---
-    if entrada.isdigit():
-        id_buscado = int(entrada)
-        
-    # --- ESCENARIO B: BÚSQUEDA POR NOMBRE (Si escribió letras) ---
-    else:
-        print(">> Buscando coincidencias con: '" + entrada + "'...")
-        texto_busqueda = entrada.lower() # Convertimos a minúsculas para comparar
-        
-        coincidencias = [] # Lista temporal para guardar resultados
-        
-        # Recorremos el inventario buscando similitudes
-        for producto in inventario:
-            nombre_producto = producto[1].lower() 
-            # Operador 'in': Verifica si el texto buscado está DENTRO del nombre
-            if texto_busqueda in nombre_producto:
-                coincidencias.append(producto)
-        
-        # Si encontramos algo, mostramos la lista para que el usuario elija
-        if len(coincidencias) > 0:
-            print("\n>> Se encontraron productos similares:")
-            print("ID    | PRODUCTO                  | STOCK")
-            print("-" * 45)
-            for p in coincidencias:
-                print(str(p[0]).ljust(5) + " | " + p[1].ljust(25) + " | " + str(p[3]))
-            print("-" * 45)
-            
-            # Pedimos el ID exacto tras ver la lista
-            seleccion = input("Ingrese el ID exacto del producto a vender: ")
-            if seleccion.isdigit():
-                id_buscado = int(seleccion)
-            else:
-                print("Error: Debe ingresar un ID numérico.")
-                return []
-        else:
-            print(">> No se encontraron productos con ese nombre.")
-            return []
-
-    # ================================================================
-    # PROCESO DE VENTA (Una vez tenemos el ID identificado)
-    # ================================================================
-
-    producto_encontrado = [] 
+    comprando = True  # Bandera para controlar el bucle de compra
     
-    # Buscamos el producto específico en la matriz principal
-    for producto in inventario:
-        if producto[0] == id_buscado:
-            producto_encontrado = producto # Referencia a la lista original
+    while comprando:
+        # 1. Entrada Flexible: El usuario puede escribir "101" o "paracetamol"
+        entrada = input("\nIngrese el ID o el Nombre del producto (o '0' para finalizar): ")
+        
+        # Salida rápida del bucle si el usuario ingresa '0'
+        if entrada == "0":
             break
-    
-    # Si el producto existe...
-    if len(producto_encontrado) > 0:
-        print("\n>> Seleccionado: " + producto_encontrado[1])
-        print(">> Stock actual: " + str(producto_encontrado[3]))
-        print(">> Precio Unit.: S/ " + str(producto_encontrado[2]))
         
-        entrada_cant = input("Ingrese cantidad a vender: ")
+        id_buscado = 0 # Variable para guardar el ID final seleccionado
         
-        if entrada_cant.isdigit(): # El método isdigit() verifica si todos los caracteres son dígitos del 0 al 9
-            cantidad = int(entrada_cant)
+        # --- ESCENARIO A: BÚSQUEDA POR ID (Si escribió solo números) ---
+        if entrada.isdigit():
+            id_buscado = int(entrada)
             
-            # Validaciones de Negocio
-            if cantidad <= 0:
-                print("Error: La cantidad debe ser mayor a 0.")
-                return []
-            elif cantidad > producto_encontrado[3]:
-                print("Error: Stock insuficiente.")
-                return []
-            else:
-                # --- ACTUALIZACIÓN DE STOCK (En Memoria) ---
-                # Restamos stock al índice 3. Al modificar 'producto_encontrado',
-                # se actualiza automáticamente la matriz 'inventario'.
-                producto_encontrado[3] = producto_encontrado[3] - cantidad
-                
-                # Calculamos total
-                total = cantidad * producto_encontrado[2]
-                
-                print("\n✅ VENTA EXITOSA ✅")
-                print("Total a cobrar: S/ " + str(total))
-                print("Nuevo Stock:    " + str(producto_encontrado[3]))
-                
-                # Retornamos los datos para la boleta: [Nombre, Cantidad, Total]
-                datos_venta = [producto_encontrado[1], cantidad, total]
-                return datos_venta 
+        # --- ESCENARIO B: BÚSQUEDA POR NOMBRE (Si escribió letras) ---
         else:
-            print("Error: Cantidad inválida.")
-            return []
+            print(">> Buscando coincidencias con: '" + entrada + "'...")
+            texto_busqueda = entrada.lower() # Convertimos a minúsculas para comparar
+            
+            coincidencias = [] # Lista temporal para guardar resultados
+            
+            # Recorremos el inventario buscando similitudes
+            for producto in inventario:
+                nombre_producto = producto[1].lower() 
+                # Operador 'in': Verifica si el texto buscado está DENTRO del nombre
+                if texto_busqueda in nombre_producto:
+                    coincidencias.append(producto)
+            
+            # Si encontramos algo, mostramos la lista para que el usuario elija
+            if len(coincidencias) > 0:
+                print("\n>> Se encontraron productos similares:")
+                for p in coincidencias:
+                    # Mostramos ID, Nombre y Stock para ayudar a decidir
+                    print(str(p[0]).ljust(5) + " | " + p[1].ljust(30) + " | Stock: " + str(p[3]))
+                
+                # Pedimos el ID exacto tras ver la lista
+                seleccion = input("Ingrese el ID exacto del producto a vender: ")
+                if seleccion.isdigit():
+                    id_buscado = int(seleccion)
+                else:
+                    print("Error: Debe ingresar un ID numérico.")
+                    continue # Regresamos al inicio del bucle while
+            else:
+                print(">> No se encontraron productos con ese nombre.")
+                continue # Regresamos al inicio del bucle while
+
+        # --- PROCESO DE SELECCIÓN Y VALIDACIÓN ---
+        producto_encontrado = [] 
+        
+        # Buscamos el producto específico en la matriz principal
+        for producto in inventario:
+            if producto[0] == id_buscado:
+                producto_encontrado = producto # Referencia a la lista original
+                break
+        
+        # Si el producto existe...
+        if len(producto_encontrado) > 0:
+            print(f">> Seleccionado: {producto_encontrado[1]} (Stock: {producto_encontrado[3]})")
+            
+            entrada_cant = input("Ingrese cantidad a vender: ")
+            
+            if entrada_cant.isdigit(): 
+                cantidad = int(entrada_cant)
+                
+                # Validaciones de Negocio
+                if cantidad <= 0:
+                    print("Error: La cantidad debe ser mayor a 0.")
+                elif cantidad > producto_encontrado[3]:
+                    print("Error: Stock insuficiente.")
+                else:
+                    # --- ÉXITO: AGREGAR AL CARRITO ---
+                    
+                    # 1. ACTUALIZACIÓN DE STOCK (En Memoria)
+                    # Restamos stock inmediatamente para reservar el producto
+                    producto_encontrado[3] = producto_encontrado[3] - cantidad
+                    
+                    # 2. Calculamos subtotal
+                    subtotal = cantidad * producto_encontrado[2]
+                    gran_total += subtotal # Sumamos al total general de la compra
+                    
+                    # 3. Guardamos en el carrito: [Nombre, Cantidad, PrecioUnit, Subtotal]
+                    item_carrito = [producto_encontrado[1], cantidad, producto_encontrado[2], subtotal]
+                    carrito.append(item_carrito)
+                    
+                    print(f"✅ Agregado: {cantidad} x {producto_encontrado[1]}")
+                    print(f"   Subtotal parcial: S/ {subtotal}")
+            else:
+                print("Error: Cantidad inválida.")
+        else:
+            print("Error: Producto no encontrado con ID " + str(id_buscado))
+
+        # --- PREGUNTA DE CONTINUACIÓN ---
+        respuesta = input("\n¿Desea agregar otro producto? (s/n): ").lower()
+        if respuesta != "s":
+            comprando = False # Cambiamos la bandera para salir del while
+
+    # --- FIN DEL BUCLE DE VENTA ---
+    # Verificamos si el carrito tiene productos
+    if len(carrito) > 0:
+        print("\n" + "="*30)
+        print("VENTA FINALIZADA")
+        print(f"Items en carrito: {len(carrito)}")
+        print(f"TOTAL A PAGAR:    S/ {gran_total}")
+        print("="*30)
+        return carrito, gran_total # Devolvemos la lista de compras y el total
     else:
-        print("Error: Producto no encontrado con ID " + str(id_buscado))
-        return []
+        print("\n>> Operación cancelada o carrito vacío.")
+        return [], 0.0
 
 def agregar_stock(inventario):
-    """
-    Busca un producto y aumenta su stock.
-    """
+    # Busca un producto y aumenta su stock.
+    
     print("\n--- REABASTECIMIENTO ---")
     
     entrada = input("Ingrese el ID del producto: ")
@@ -272,18 +286,17 @@ def agregar_stock(inventario):
 # 5. CAPA DE REPORTES (Generación de Archivos)
 # =============================================================================
 
-def generar_boleta_txt(datos_venta):
-    """
-    Genera un TXT único usando fecha y hora para evitar sobrescribir boletas pasadas.
-    Recibe: [Nombre, Cantidad, Total]
-    """
+def generar_boleta_txt(carrito, gran_total):
+    # Genera un TXT único con el detalle de TODOS los productos del carrito.
+    # Recibe: La lista 'carrito' y el 'gran_total'.
+    
     print("\n--- GENERANDO COMPROBANTE ---")
     cliente = input("Nombre del Cliente: ")
     ruc = input("RUC o DNI: ")
     
     # Obtenemos fecha y hora exacta
     ahora = datetime.now()
-    # Timestamp para el nombre del archivo (ej: 20231201_143000)
+    # Timestamp para el nombre del archivo
     marca_tiempo = ahora.strftime("%Y%m%d_%H%M%S")
     # Fecha legible para imprimir DENTRO del ticket
     fecha_impresion = ahora.strftime("%d/%m/%Y %H:%M:%S")
@@ -300,17 +313,29 @@ def generar_boleta_txt(datos_venta):
     # Escritura del archivo
     archivo = open(ruta_final, 'w', encoding='utf-8')
     
-    archivo.write("==========================================\n")
-    archivo.write("           FARMACIA 'MEDIFARMA'           \n")
-    archivo.write("==========================================\n")
+    archivo.write("==============================================\n")
+    archivo.write("           FARMACIA 'MEDIFARMA'               \n")
+    archivo.write("==============================================\n")
     archivo.write("Fecha:   " + fecha_impresion + "\n")
     archivo.write("Cliente: " + cliente + "\n")
     archivo.write("DOC:     " + ruc + "\n")
-    archivo.write("------------------------------------------\n")
-    archivo.write("Producto: " + datos_venta[0] + "\n")
-    archivo.write("Cantidad: " + str(datos_venta[1]) + "\n")
-    archivo.write("TOTAL:    S/ " + str(datos_venta[2]) + "\n")
-    archivo.write("==========================================\n")
+    archivo.write("----------------------------------------------\n")
+    archivo.write("DESCRIPCION                   CANT    TOTAL   \n")
+    archivo.write("----------------------------------------------\n")
+    
+    # Bucle para imprimir cada producto del carrito
+    for item in carrito:
+        # item tiene la estructura: [Nombre, Cantidad, PrecioUnit, Subtotal]
+        # Cortamos el nombre a 28 caracteres y rellenamos espacios
+        nombre = item[0][:28].ljust(28) 
+        cant = str(item[1]).center(6)
+        subt = str(item[3]).rjust(8)
+        
+        archivo.write(f"{nombre}{cant} S/{subt}\n")
+        
+    archivo.write("==============================================\n")
+    archivo.write(f"TOTAL A PAGAR:                S/ {gran_total}\n")
+    archivo.write("==============================================\n")
     
     archivo.close()
     print(">> Archivo guardado en: " + ruta_final)
@@ -345,11 +370,13 @@ def main():
             input("\nEnter para continuar...")
             
         elif opcion == "2":
-            resultado = realizar_venta(mis_productos)
-            # Si 'resultado' tiene datos, la venta fue exitosa
-            if len(resultado) > 0:
-                if input("¿Generar boleta? (s/n): ") == "s":
-                    generar_boleta_txt(resultado)
+            # Recibimos DOS valores: el carrito (lista) y el total (numero)
+            carrito_compras, total_pagar = realizar_venta(mis_productos)
+            
+            # Si el carrito tiene productos, la venta fue exitosa
+            if len(carrito_compras) > 0:
+                if input("¿Generar boleta? (s/n): ").lower() == "s":
+                    generar_boleta_txt(carrito_compras, total_pagar)
             input("\nEnter para continuar...")
             
         elif opcion == "3":
@@ -365,4 +392,6 @@ def main():
         else:
             print("Opción no válida.")
 
+
+# Llamada del prorgrama
 main()
